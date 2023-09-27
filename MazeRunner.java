@@ -38,8 +38,8 @@ public class MazeRunner {
             }
 
             if (generator != null) {
-                //maze = generator.generate(width, height);
-                //maze.printMaze();
+                maze = generator.generate(width, height);
+                maze.printMaze();
             } else {
                 System.err.println("Erreur : Méthode de génération invalide.");
                 System.exit(1);
@@ -48,7 +48,11 @@ public class MazeRunner {
             System.err.println("Erreur : Veuillez fournir une largeur et une hauteur valides supérieures à 5.");
             System.exit(1);
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("Erreur inattendue lors de la génération du labyrinthe. Veuillez réessayer.");
+            System.exit(1);
+        } catch (OutOfMemoryError e) {
+            System.err.println("Erreur : Mémoire insuffisante. Veuillez réessayer avec un labyrinthe plus petit.");
             System.exit(1);
         }
     }
