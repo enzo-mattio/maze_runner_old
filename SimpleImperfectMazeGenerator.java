@@ -1,10 +1,10 @@
 import java.util.*;
 
-public class SimplePerfectMazeGenerator implements MazeGenerator {
+public class SimpleImperfectMazeGenerator implements MazeGenerator {
     private final Random random = new Random();
 
     // Constructeur du générateur de labyrinthes parfaits simples
-    public SimplePerfectMazeGenerator(int width, int height, Cell[] maze) {
+    public SimpleImperfectMazeGenerator(int width, int height, Cell[] maze) {
         generate(maze, width, height);
     }
 

@@ -1,3 +1,3 @@
 public interface MazeGenerator {
-    Maze generate(int width, int height);
+    void generate(Cell[] maze, int width, int height);
 }

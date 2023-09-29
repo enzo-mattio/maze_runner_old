@@ -1,59 +1,70 @@
+import exception.MazeGenerationException;
+
 public class Maze {
     private final int width;
     private final int height;
-    private final Cell[][] maze;
+    public String generationType, generatorMethod;
 
-    public Maze(int width, int height){
+    private Cell[] maze;
+
+    public Maze(int width, int height, String generationType, String generatorMethod) throws MazeGenerationException {
         this.width = width;
         this.height = height;
-        this.maze = new Cell[width][height];
+        this.generationType = generationType;
+        this.generatorMethod = generatorMethod;
+        this.maze = new Cell[width * height];
+        initMaze();
+        SelectMaze();
+        printMaze();
+    }
+
+    public void SelectMaze() throws MazeGenerationException {
+        MazeGenerator generator = switch (generationType.toLowerCase()) {
+
+            case "perfect" -> switch (generatorMethod.toLowerCase()) {
+                case "simple" -> new SimplePerfectMazeGenerator(width, height, maze);
+
+                default -> throw new IllegalStateException("Unexpected value: " + generatorMethod.toLowerCase());
+            };
+            case "imperfect" -> switch (generatorMethod.toLowerCase()) {
+                case "simple" -> new SimpleImperfectMazeGenerator(width, height, maze);
+
+                default -> throw new MazeGenerationException("Méthode de génération invalide.");
+            };
+            default -> throw new MazeGenerationException("Type de labyrinthe invalide.");
+        };
     }
     public void initMaze() {
-        // Init with the entry and the exit
+        // Initialisation avec l'entrée et la sortie
         int id = 0;
-        for (int i = 0; i < this.width; i++) {
-            for (int j = 0; j < this.height ; j++) {
-                maze[i][j] = new Cell(id);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                maze[id] = new Cell(x, y);
                 id++;
             }
         }
-        // Init the entry and the exit
-        maze[0][0].setNorth("E");
-        maze[width-1][height-1].setSouth("S");
-        System.out.println(maze[0][0].getBody()[1]);
-        System.out.println(maze[width-1][height-1].getBody()[7]);
 
     }
 
 
     public void printMaze(){
-        StringBuilder string1 = new StringBuilder();
-        StringBuilder string2 = new StringBuilder();
-        StringBuilder string3 = new StringBuilder();
-
-        for (int i = 0; i < this.width; i++) {
-            for (int j = 0; j < this.height ; j++) {
-                string1.append(maze[i][j].getBody()[0]);
-                string1.append(maze[i][j].getBody()[1]);
-                string1.append(maze[i][j].getBody()[2]);
-
-                string2.append(maze[i][j].getBody()[3]);
-                string2.append(maze[i][j].getBody()[4]);
-                string2.append(maze[i][j].getBody()[5]);
-
-                string3.append(maze[i][j].getBody()[6]);
-                string3.append(maze[i][j].getBody()[7]);
-                string3.append(maze[i][j].getBody()[8]);
-
+        // Affichage du labyrinthe
+        maze[0].removeWall(0);
+        maze[maze.length - 1].removeWall(2);
+        int delta = 0;
+        for (int y = 0; y < height; y++) {
+            StringBuilder str1 = new StringBuilder();
+            StringBuilder str2 = new StringBuilder();
+            StringBuilder str3 = new StringBuilder();
+            for (int x = 0; x < width; x++) {
+                String[] strs = maze[x + delta].getBody();
+                str1.append(strs[0]);
+                str2.append(strs[1]);
+                str3.append(strs[2]);
             }
-            System.out.println(string1);
-            System.out.println(string2);
-            System.out.println(string3);
-            string1 = new StringBuilder();
-            string2 = new StringBuilder();
-            string3 = new StringBuilder();
+            delta += width;
+            System.out.println(str1 + "\n" + str2 + "\n" + str3);
         }
-
     }
 }
 
