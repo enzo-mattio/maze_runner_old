@@ -49,6 +49,9 @@ public class Cell {
     public void removeWall(int direction) {
         wall[direction] = false;
     }
+    public boolean hasWall(int direction) {
+        return wall[direction];
+    }
 
 
 }

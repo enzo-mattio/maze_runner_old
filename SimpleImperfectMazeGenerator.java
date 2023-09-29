@@ -30,6 +30,13 @@ public class SimpleImperfectMazeGenerator implements MazeGenerator {
                 currentCell = stack.pop();
             }
         }
+        if (maze[0].hasWall(0)) {
+            maze[0].removeWall(1);
+            maze[1].removeWall(3);
+        } else {
+            maze[0].removeWall(2);
+            maze[width].removeWall(0);
+        }
     }
 
     // Méthode pour obtenir les voisins non visités d'une cellule donnée
